@@ -438,3 +438,18 @@ Uses PROMPT as header line format."
 
 (provide 'c3po)
 ;;; c3po.el ends here
+
+(defun c3po-display-explanation (buffer-name)
+  "Display the explanation buffer at the bottom of the window."
+  (let ((buffer (get-buffer-create buffer-name)))
+    ;; Display the buffer in a window at the bottom of the frame.
+    (display-buffer buffer (c3po-display-action-bottom-collapsed))))
+
+(defun c3po-display-action-bottom-collapsed ()
+  "Return display actions for displaying a buffer collapsed at the bottom."
+  ;; Define a custom action to display the buffer in a small window at the bottom.
+  '((display-buffer-in-side-window)
+    (side . bottom)
+    (window-height . 0.1) ;; Start with a small height, adjust as needed
+    (window-parameters . ((no-delete-other-windows . t)))))
+
