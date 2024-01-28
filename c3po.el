@@ -338,19 +338,11 @@ Uses PROMPT as header line format."
                         (interactive)
                         (kill-buffer)
                         (abort-recursive-edit)))
-    (c3po-pop-results-buffer)
     (c3po-append-result "")
     (c3po--pop-helper-buffer buffer)
     (recursive-edit)
     input))
 
-(defun c3po-pop-results-buffer ()
-  "Display `c3po-buffer-name' in a right side window."
-  (interactive)
-  (let ((buffer (get-buffer-create c3po-buffer-name)))
-    (display-buffer-in-side-window buffer
-                                   '((side . right)
-                                     (window-width . 0.5)))))
 
 (defun c3po--pop-helper-buffer (buffer)
   "Show BUFFER on the bottom as a side window."
@@ -392,9 +384,7 @@ Uses PROMPT as header line format."
   "Explain the code for the selected region, or prompt the user for input."
   (interactive)
   (c3po-new-chat 'developer)
-  (let ((prompt (if (use-region-p)
-                    (buffer-substring-no-properties (region-beginning) (region-end))
-                  (c3po--make-input-buffer (format "(%s)> Enter the code " (symbol-name 'developer)) nil nil))))
+  (let ((prompt (c3po--make-input-buffer (format "(%s)> Enter the code " (symbol-name 'developer)) nil nil)))
     (c3po-send-conversation
      'developer
      (format "Explain the following code, be concise:\n```%s\n%s```" (c3po--get-buffer-mode-as-tag) prompt)
