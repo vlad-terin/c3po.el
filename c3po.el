@@ -391,7 +391,8 @@ Uses PROMPT as header line format."
       (c3po-send-conversation
        'developer
        (format "Explain the following code, be concise:\n```%s\n%s```" (c3po--get-buffer-mode-as-tag) code)
-       nil))))
+       nil)
+      (c3po-display-explanation "*code-explanation*"))))
 
 (defun c3po--get-buffer-mode-as-tag ()
   "Get buffer mode as a string to be used as a tag for a markdown code block."
