@@ -383,12 +383,15 @@ Uses PROMPT as header line format."
 (defun c3po-explain-code ()
   "Explain the code for the selected region, or prompt the user for input."
   (interactive)
-  (c3po-new-chat 'developer)
-  (let ((prompt (c3po--make-input-buffer (format "(%s)> Enter the code " (symbol-name 'developer)) nil nil)))
-    (c3po-send-conversation
-     'developer
-     (format "Explain the following code, be concise:\n```%s\n%s```" (c3po--get-buffer-mode-as-tag) prompt)
-     nil)))
+  (let ((code (if (use-region-p)
+                  (buffer-substring-no-properties (region-beginning) (region-end))
+                (c3po--make-input-buffer (format "(%s)> Enter the code " (symbol-name 'developer)) nil nil))))
+    (when (and code (not (string-blank-p code)))
+      (c3po-new-chat 'developer)
+      (c3po-send-conversation
+       'developer
+       (format "Explain the following code, be concise:\n```%s\n%s```" (c3po--get-buffer-mode-as-tag) code)
+       nil))))
 
 (defun c3po--get-buffer-mode-as-tag ()
   "Get buffer mode as a string to be used as a tag for a markdown code block."
